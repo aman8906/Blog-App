@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 function Creators() {
   const [creators, setCreators] = useState([]);
   console.log(creators);
+
   useEffect(() => {
     const fetchCreators = async () => {
       try {
         const { data } = await axios.get(
-         `${import.meta.env.VITE_API_BASE}/api/users/admins`
+          `${import.meta.env.VITE_API_BASE}/api/users/admins`,
           {
             withCredentials: true,
           }
@@ -48,7 +49,7 @@ function Creators() {
             </h2>
             <p className="text-center text-gray-600 mt-2">{creator.email}</p>
             <p className="text-center text-gray-600 mt-2">{creator.phone}</p>
-            <p className="text-center text-gray-600 mt-2">{creator.role}</p>
+            <p className="text-center text-gray-600 mt-2 capitalize">{creator.role}</p>
           </div>
         </div>
       ))}
