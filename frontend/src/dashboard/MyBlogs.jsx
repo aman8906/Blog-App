@@ -15,10 +15,10 @@ function MyBlogs() {
             withCredentials: true,
           }
         );
-        console.log(data);
-        setMyBlogs(data.blogs); // assuming the API returns { blogs: [...] }
+        console.log("Fetched Blogs:", data);
+        setMyBlogs(data.blogs || []); // fallback empty array
       } catch (error) {
-        console.log(error);
+        console.log("Fetch Error:", error);
         toast.error("Failed to fetch blogs");
       }
     };
@@ -36,6 +36,7 @@ function MyBlogs() {
       toast.success(res.data.message || "Blog deleted successfully");
       setMyBlogs((prev) => prev.filter((blog) => blog._id !== id));
     } catch (error) {
+      console.log("Delete Error:", error);
       toast.error(error?.response?.data?.message || "Failed to delete blog");
     }
   };
@@ -43,26 +44,20 @@ function MyBlogs() {
   return (
     <div className="container mx-auto my-12 p-4">
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:ml-20">
-        {myBlogs && myBlogs.length > 0 ? (
+        {myBlogs.length > 0 ? (
           myBlogs.map((element) => (
             <div
               className="bg-white shadow-lg rounded-lg overflow-hidden"
               key={element._id}
             >
-              {element?.blogImage && (
-                <img
-                  src={element.blogImage.url}
-                  alt="blogImg"
-                  className="w-full h-48 object-cover"
-                />
-              )}
+              <img
+                src={element?.blogImage?.url || "/default-blog.jpg"}
+                alt="Blog"
+                className="w-full h-48 object-cover"
+              />
               <div className="p-4">
-                <span className="text-sm text-gray-600">
-                  {element.category}
-                </span>
-                <h4 className="text-xl font-semibold my-2">
-                  {element.title}
-                </h4>
+                <span className="text-sm text-gray-600">{element.category}</span>
+                <h4 className="text-xl font-semibold my-2">{element.title}</h4>
                 <div className="flex justify-between mt-4">
                   <Link
                     to={`/blog/update/${element._id}`}
