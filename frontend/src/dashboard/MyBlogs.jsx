@@ -10,18 +10,14 @@ function MyBlogs() {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blogs`,
-          {
-            withCredentials: true,
-          }
+          "http://localhost:4001/api/blogs/my-blogs", // ✅ Correct endpoint
+          { withCredentials: true }
         );
-        console.log("Fetched blogs:", data);
-        setMyBlogs(data.blogs); // backend must return { blogs: [...] }
+        console.log(data);
+        setMyBlogs(data.blogs); // ✅ Ensure response has `blogs` array
       } catch (error) {
-        console.error("Fetch error:", error?.response?.data || error.message);
-        toast.error(
-          error?.response?.data?.message || "Failed to fetch blogs"
-        );
+        console.log(error);
+        toast.error("Failed to fetch blogs");
       }
     };
     fetchMyBlogs();
@@ -30,8 +26,10 @@ function MyBlogs() {
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}/api/blogs/delete/${id}`,
-        { withCredentials: true }
+        `http://localhost:4001/api/blogs/delete/${id}`,
+        {
+          withCredentials: true,
+        }
       );
       toast.success(res.data.message || "Blog deleted successfully");
       setMyBlogs((prev) => prev.filter((blog) => blog._id !== id));
@@ -45,31 +43,35 @@ function MyBlogs() {
   return (
     <div className="container mx-auto my-12 p-4">
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:ml-20">
-        {myBlogs.length > 0 ? (
-          myBlogs.map((blog) => (
+        {myBlogs && myBlogs.length > 0 ? (
+          myBlogs.map((element) => (
             <div
               className="bg-white shadow-lg rounded-lg overflow-hidden"
-              key={blog._id}
+              key={element._id}
             >
-              {blog.blogImage?.url && (
+              {element?.blogImage && (
                 <img
-                  src={blog.blogImage.url}
-                  alt="blog"
+                  src={element.blogImage.url}
+                  alt="blogImg"
                   className="w-full h-48 object-cover"
                 />
               )}
               <div className="p-4">
-                <span className="text-sm text-gray-600">{blog.category}</span>
-                <h4 className="text-xl font-semibold my-2">{blog.title}</h4>
+                <span className="text-sm text-gray-600">
+                  {element.category}
+                </span>
+                <h4 className="text-xl font-semibold my-2">
+                  {element.title}
+                </h4>
                 <div className="flex justify-between mt-4">
                   <Link
-                    to={`/blog/update/${blog._id}`}
+                    to={`/blog/update/${element._id}`}
                     className="text-blue-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
                   >
                     UPDATE
                   </Link>
                   <button
-                    onClick={() => handleDelete(blog._id)}
+                    onClick={() => handleDelete(element._id)}
                     className="text-red-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
                   >
                     DELETE
