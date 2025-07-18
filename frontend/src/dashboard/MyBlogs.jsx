@@ -10,14 +10,17 @@ function MyBlogs() {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4001/api/blogs/my-blogs", // ✅ Correct endpoint
-          { withCredentials: true }
+          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blog`,
+          {
+            withCredentials: true,
+          }
         );
-        console.log(data);
-        setMyBlogs(data.blogs); // ✅ Ensure response has `blogs` array
+        setMyBlogs(data.blogs); // ✅ your backend must return { blogs: [...] }
       } catch (error) {
         console.log(error);
-        toast.error("Failed to fetch blogs");
+        toast.error(
+          error?.response?.data?.message || "Failed to fetch blogs"
+        );
       }
     };
     fetchMyBlogs();
@@ -26,10 +29,8 @@ function MyBlogs() {
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4001/api/blogs/delete/${id}`,
-        {
-          withCredentials: true,
-        }
+        `${import.meta.env.VITE_API_BASE_URL}/api/blogs/delete/${id}`,
+        { withCredentials: true }
       );
       toast.success(res.data.message || "Blog deleted successfully");
       setMyBlogs((prev) => prev.filter((blog) => blog._id !== id));
@@ -44,34 +45,34 @@ function MyBlogs() {
     <div className="container mx-auto my-12 p-4">
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:ml-20">
         {myBlogs && myBlogs.length > 0 ? (
-          myBlogs.map((element) => (
+          myBlogs.map((blog) => (
             <div
               className="bg-white shadow-lg rounded-lg overflow-hidden"
-              key={element._id}
+              key={blog._id}
             >
-              {element?.blogImage && (
+              {blog?.blogImage?.url && (
                 <img
-                  src={element.blogImage.url}
-                  alt="blogImg"
+                  src={blog.blogImage.url}
+                  alt="blog"
                   className="w-full h-48 object-cover"
                 />
               )}
               <div className="p-4">
                 <span className="text-sm text-gray-600">
-                  {element.category}
+                  {blog.category}
                 </span>
                 <h4 className="text-xl font-semibold my-2">
-                  {element.title}
+                  {blog.title}
                 </h4>
                 <div className="flex justify-between mt-4">
                   <Link
-                    to={`/blog/update/${element._id}`}
+                    to={`/blog/update/${blog._id}`}
                     className="text-blue-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
                   >
                     UPDATE
                   </Link>
                   <button
-                    onClick={() => handleDelete(element._id)}
+                    onClick={() => handleDelete(blog._id)}
                     className="text-red-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
                   >
                     DELETE
