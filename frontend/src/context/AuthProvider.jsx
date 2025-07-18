@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         console.log(token);
         if (token) {
           const { data } = await axios.get(
-            "http://localhost:4001/api/users/my-profile",
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/my-profile`,
             {
               withCredentials: true,
               headers: {
