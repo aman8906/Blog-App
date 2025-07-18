@@ -9,7 +9,7 @@ function Creators() {
     const fetchCreators = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_BASE}/api/users/admins`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/admins`,
           {
             withCredentials: true,
           }
