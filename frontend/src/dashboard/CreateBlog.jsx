@@ -1,4 +1,4 @@
-/*import axios from "axios";
+import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -126,8 +126,8 @@ function CreateBlog() {
 }
 
 export default CreateBlog;
-*/
-import axios from "axios";
+
+/*import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -195,7 +195,7 @@ function CreateBlog() {
       <div className="max-w-4xl mx-auto p-6 border rounded-lg shadow-lg">
         <h3 className="text-2xl font-semibold mb-8">Create Blog</h3>
         <form onSubmit={handleCreateBlog} className="space-y-6">
-          {/* Category */}
+          {/* Category *
           <div className="space-y-2">
             <label className="block text-lg">Category</label>
             <select
@@ -212,7 +212,7 @@ function CreateBlog() {
             </select>
           </div>
 
-          {/* Title */}
+          {/* Title *
           <div className="space-y-2">
             <label className="block text-lg">Title</label>
             <input
@@ -224,7 +224,7 @@ function CreateBlog() {
             />
           </div>
 
-          {/* Blog Image */}
+          {/* Blog Image *
           <div className="space-y-2">
             <label className="block text-lg">Blog Image</label>
             <div className="flex items-center justify-center">
@@ -242,7 +242,7 @@ function CreateBlog() {
             />
           </div>
 
-          {/* About */}
+          {/* About *}
           <div className="space-y-2">
             <label className="block text-lg">About</label>
             <textarea
@@ -267,3 +267,4 @@ function CreateBlog() {
 }
 
 export default CreateBlog;
+*/
