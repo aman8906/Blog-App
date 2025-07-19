@@ -10,14 +10,13 @@ function MyBlogs() {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blog`, // ✅ FIXED here: "my-blog" not "my-blogs"
+          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blog`,
           {
             withCredentials: true,
           }
         );
 
-        // Backend should return { blogs: [...] }
-        setMyBlogs(data.blogs || []);
+        setMyBlogs(data.blogs || []); // ✅ accessing "blogs" array
       } catch (error) {
         console.error("Fetch My Blogs Error:", error);
         toast.error(
