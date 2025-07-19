@@ -10,19 +10,22 @@ function MyBlogs() {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blog`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/my-blogs`, // ✅ corrected
           {
             withCredentials: true,
           }
         );
-        setMyBlogs(data.blogs); // ✅ your backend must return { blogs: [...] }
+
+        // Make sure your backend returns { blogs: [...] }
+        setMyBlogs(data.blogs || []); 
       } catch (error) {
-        console.log(error);
+        console.error(error);
         toast.error(
           error?.response?.data?.message || "Failed to fetch blogs"
         );
       }
     };
+
     fetchMyBlogs();
   }, []);
 
@@ -44,7 +47,7 @@ function MyBlogs() {
   return (
     <div className="container mx-auto my-12 p-4">
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:ml-20">
-        {myBlogs && myBlogs.length > 0 ? (
+        {myBlogs.length > 0 ? (
           myBlogs.map((blog) => (
             <div
               className="bg-white shadow-lg rounded-lg overflow-hidden"
@@ -58,12 +61,8 @@ function MyBlogs() {
                 />
               )}
               <div className="p-4">
-                <span className="text-sm text-gray-600">
-                  {blog.category}
-                </span>
-                <h4 className="text-xl font-semibold my-2">
-                  {blog.title}
-                </h4>
+                <span className="text-sm text-gray-600">{blog.category}</span>
+                <h4 className="text-xl font-semibold my-2">{blog.title}</h4>
                 <div className="flex justify-between mt-4">
                   <Link
                     to={`/blog/update/${blog._id}`}
