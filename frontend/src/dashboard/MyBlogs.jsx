@@ -36,7 +36,7 @@ function MyBlogs() {
   };
   return (
     <div>
-      <div className="container w-full flex justify-center my-18 px-8">
+      <div className="container w-full flex justify-center my-12 px-4">
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:ml-20">
           {myBlogs && myBlogs.length > 0 ? (
             myBlogs.map((element) => (
