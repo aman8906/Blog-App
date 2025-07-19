@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -36,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     const fetchBlogs = async () => {
       try {
         const { data } = await axios.get(
-         `${import.meta.env.VITE_API_BASE_URL}/api/blogs/all-blogs`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/blogs/all-blogs`,
           { withCredentials: true }
         );
         console.log(data);
