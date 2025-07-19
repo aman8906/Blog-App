@@ -14,43 +14,52 @@ import { useAuth } from "./context/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import UpdateBlog from "./dashboard/UpdateBlog";
 import Detail from "./pages/Detail";
-//import NotFound from "./pages/NotFound";
+
 function App() {
   const location = useLocation();
-  const hideNavbarFooter = ["/dashboard", "/login", "/register"].includes(
-    location.pathname
-  );
-  const { blogs, isAuthenticated } = useAuth();
-  let token = localStorage.getItem("jwt"); // Retrieve the token directly from the localStorage to maininting the routes protect (Go to login.jsx)
-  console.log(blogs);
-  console.log(isAuthenticated); // it is not using because every page refresh it was redirected to /login
+  const { blogs, isAuthenticated, loading } = useAuth();
+
+  const authPages = ["/login", "/register"];
+
+  const hideNavbarFooter = authPages.includes(location.pathname) || location.pathname.includes("/dashboard");
+
+  if (loading) return <div className="text-center mt-20 text-xl">Loading...</div>;
 
   return (
     <div>
       {!hideNavbarFooter && <Navbar />}
+
       <Routes>
+        {/* Public Routes */}
         <Route
-          exact
-          path="/"
-          element={token ? <Home /> : <Navigate to={"/login"} />}
+          path="/login"
+          element={!isAuthenticated ? <Login /> : <Navigate to="/" />}
         />
-        <Route exact path="/blogs" element={<Blogs />} />
-        <Route exact path="/about" element={<About />} />
-        <Route exact path="/contact" element={<Contact />} />
-        <Route exact path="/creators" element={<Creators />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/register" element={<Register />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/register"
+          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
+        />
 
-        {/* Single page route */}
-       <Route exact path="/blog/:id" element={<Detail />} />
-
-        {/* Update page route */}
-        <Route exact path="/blog/update/:id" element={<UpdateBlog />} />
-
-        {/* Universal route *
-        <Route path="*" element={<NotFound />} />*/}
+        {/* Protected Routes */}
+        {isAuthenticated ? (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/creators" element={<Creators />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/blog/:id" element={<Detail />} />
+            <Route path="/blog/update/:id" element={<UpdateBlog />} />
+          </>
+        ) : (
+          <>
+            {/* If user tries to access protected route without login */}
+            <Route path="*" element={<Navigate to="/login" />} />
+          </>
+        )}
       </Routes>
+
       <Toaster />
       {!hideNavbarFooter && <Footer />}
     </div>
